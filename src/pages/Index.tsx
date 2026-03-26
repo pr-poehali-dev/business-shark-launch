@@ -1,6 +1,39 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
+const LEAD_URL = "https://functions.poehali.dev/9550900e-7add-4706-aae7-d00c99dd5413";
+
+async function sendLead(data: { name: string; phone: string; subject?: string; message?: string }) {
+  const res = await fetch(LEAD_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Ошибка отправки");
+}
+
+function useLeadForm(defaultSubject = "") {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState(defaultSubject);
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+    try {
+      await sendLead({ name, phone, subject, message });
+      setStatus("ok");
+      setName(""); setPhone(""); setMessage(""); setSubject(defaultSubject);
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return { name, setName, phone, setPhone, message, setMessage, subject, setSubject, status, submit };
+}
+
 /* ─── Images ─────────────────────────────────────── */
 const IMG_HERO = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/b512b98b-d8c2-4470-be81-17b7ddc36832.jpg";
 const IMG_SIGN = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/4fcac279-47e9-4243-85f6-f16f95f17191.jpg";
@@ -26,6 +59,8 @@ const BANKS = [
    MODAL
 ═══════════════════════════════════════════════════ */
 function FeedbackModal({ onClose }: { onClose: () => void }) {
+  const f = useLeadForm();
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
@@ -43,24 +78,42 @@ function FeedbackModal({ onClose }: { onClose: () => void }) {
           <h3 className="text-xl font-bold text-foreground">Оставить заявку</h3>
           <p className="text-muted-foreground text-sm mt-1 font-golos">Свяжемся в течение 15 минут</p>
         </div>
-        <div className="space-y-3">
-          <input type="text" placeholder="Ваше имя"
-            className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos"
-          />
-          <input type="tel" placeholder="Телефон"
-            className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos"
-          />
-          <textarea placeholder="Ваш вопрос (необязательно)" rows={3}
-            className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all resize-none font-golos"
-          />
-          <button className="w-full gradient-blue text-white font-bold py-3.5 rounded-2xl hover:opacity-90 transition-all hover:shadow-glow">
-            Отправить заявку
-          </button>
-        </div>
-        <p className="text-xs text-muted-foreground text-center mt-4 font-golos">
-          Нажимая кнопку, вы соглашаетесь с{" "}
-          <a href="#privacy" className="text-primary underline" onClick={onClose}>политикой конфиденциальности</a>
-        </p>
+
+        {f.status === "ok" ? (
+          <div className="text-center py-6 space-y-3">
+            <div className="w-14 h-14 bg-accent/15 rounded-full flex items-center justify-center mx-auto">
+              <Icon name="CheckCircle" size={32} className="text-accent" />
+            </div>
+            <p className="font-black text-foreground">Заявка отправлена!</p>
+            <p className="text-sm text-muted-foreground font-golos">Свяжемся в течение 15 минут</p>
+            <button onClick={onClose} className="mt-2 gradient-blue text-white font-bold px-6 py-2.5 rounded-2xl hover:opacity-90 transition-all">
+              Закрыть
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={f.submit} className="space-y-3">
+            <input type="text" placeholder="Ваше имя" required value={f.name} onChange={(e) => f.setName(e.target.value)}
+              className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos"
+            />
+            <input type="tel" placeholder="Телефон" required value={f.phone} onChange={(e) => f.setPhone(e.target.value)}
+              className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos"
+            />
+            <textarea placeholder="Ваш вопрос (необязательно)" rows={3} value={f.message} onChange={(e) => f.setMessage(e.target.value)}
+              className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all resize-none font-golos"
+            />
+            {f.status === "error" && <p className="text-sm text-red-500 font-golos">Ошибка отправки. Позвоните нам напрямую.</p>}
+            <button type="submit" disabled={f.status === "loading"} className="w-full gradient-blue text-white font-bold py-3.5 rounded-2xl hover:opacity-90 transition-all hover:shadow-glow disabled:opacity-60">
+              {f.status === "loading" ? "Отправляем..." : "Отправить заявку"}
+            </button>
+          </form>
+        )}
+
+        {f.status !== "ok" && (
+          <p className="text-xs text-muted-foreground text-center mt-4 font-golos">
+            Нажимая кнопку, вы соглашаетесь с{" "}
+            <a href="#privacy" className="text-primary underline" onClick={onClose}>политикой конфиденциальности</a>
+          </p>
+        )}
       </div>
     </div>
   );
@@ -639,6 +692,8 @@ function FAQSection() {
    CONTACTS
 ═══════════════════════════════════════════════════ */
 function ContactsSection() {
+  const f = useLeadForm();
+
   return (
     <section id="contacts" className="py-20 gradient-hero">
       <div className="container mx-auto px-4 max-w-4xl">
@@ -670,22 +725,33 @@ function ContactsSection() {
           </div>
           <div className="bg-white rounded-3xl border border-border shadow-card p-7">
             <h3 className="font-black text-foreground mb-5">Оставьте заявку</h3>
-            <div className="space-y-3">
-              <input type="text" placeholder="Ваше имя" className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos" />
-              <input type="tel" placeholder="Телефон" className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos" />
-              <select className="w-full border border-border rounded-2xl px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos">
+            {f.status === "ok" ? (
+              <div className="text-center py-8 space-y-3">
+                <div className="w-14 h-14 bg-accent/15 rounded-full flex items-center justify-center mx-auto">
+                  <Icon name="CheckCircle" size={32} className="text-accent" />
+                </div>
+                <p className="font-black text-foreground">Заявка отправлена!</p>
+                <p className="text-sm text-muted-foreground font-golos">Свяжемся в течение 15 минут</p>
+              </div>
+            ) : (
+              <form onSubmit={f.submit} className="space-y-3">
+              <input type="text" placeholder="Ваше имя" required value={f.name} onChange={(e) => f.setName(e.target.value)} className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos" />
+              <input type="tel" placeholder="Телефон" required value={f.phone} onChange={(e) => f.setPhone(e.target.value)} className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos" />
+              <select value={f.subject} onChange={(e) => f.setSubject(e.target.value)} className="w-full border border-border rounded-2xl px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all font-golos">
                 <option value="">Что хотите открыть?</option>
                 <option>ИП</option>
                 <option>ООО</option>
                 <option>Нужна консультация</option>
               </select>
-              <textarea placeholder="Ваш вопрос (необязательно)" rows={3}
+              <textarea placeholder="Ваш вопрос (необязательно)" rows={3} value={f.message} onChange={(e) => f.setMessage(e.target.value)}
                 className="w-full border border-border rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all resize-none font-golos"
               />
-              <button className="w-full gradient-blue text-white font-black py-3 rounded-2xl hover:opacity-90 transition-all hover:shadow-glow">
-                Отправить заявку
+              {f.status === "error" && <p className="text-sm text-red-500 font-golos">Ошибка. Позвоните нам напрямую.</p>}
+              <button type="submit" disabled={f.status === "loading"} className="w-full gradient-blue text-white font-black py-3 rounded-2xl hover:opacity-90 transition-all hover:shadow-glow disabled:opacity-60">
+                {f.status === "loading" ? "Отправляем..." : "Отправить заявку"}
               </button>
-            </div>
+              </form>
+            )}
           </div>
         </div>
       </div>
