@@ -299,7 +299,7 @@ function HeroSection() {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end animate-fade-up animate-float" style={{ animationDelay: "0.15s" }}>
+          <div className="flex justify-center lg:justify-end animate-float">
             <div className="relative">
               <div className="absolute inset-0 rounded-3xl blur-3xl opacity-30"
                 style={{ background: "linear-gradient(135deg, #7c3aed, #06b6d4)" }} />
