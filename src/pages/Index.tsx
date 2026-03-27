@@ -36,8 +36,8 @@ function useLeadForm(defaultSubject = "") {
 
 /* ─── Images ─────────────────────────────────────── */
 const IMG_HERO = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/e3aa6448-ee60-434f-9452-670d3124f2bf.jpg";
-const IMG_SIGN = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/4fcac279-47e9-4243-85f6-f16f95f17191.jpg";
-const IMG_DEAL = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/b070b4f8-21e6-4b37-8bfe-d7c00723968b.jpg";
+const IMG_SIGN = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/576c3fc6-408a-4d1d-8360-e5db4a793bc7.jpg";
+const IMG_DEAL = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/d4992b1d-d856-47e2-a01a-62ea12e7ca23.jpg";
 
 /* ─── Contacts ────────────────────────────────────── */
 const PHONE    = "+7 927 004 69 09";
