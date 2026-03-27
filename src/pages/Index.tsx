@@ -35,7 +35,7 @@ function useLeadForm(defaultSubject = "") {
 }
 
 /* ─── Images ─────────────────────────────────────── */
-const IMG_HERO = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/b512b98b-d8c2-4470-be81-17b7ddc36832.jpg";
+const IMG_HERO = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/e3aa6448-ee60-434f-9452-670d3124f2bf.jpg";
 const IMG_SIGN = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/4fcac279-47e9-4243-85f6-f16f95f17191.jpg";
 const IMG_DEAL = "https://cdn.poehali.dev/projects/65bdf58c-8e17-4143-8f6d-38982ea6a074/files/b070b4f8-21e6-4b37-8bfe-d7c00723968b.jpg";
 
