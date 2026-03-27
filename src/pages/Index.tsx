@@ -299,32 +299,31 @@ function HeroSection() {
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end animate-float">
-            <div className="relative">
-              <div className="absolute inset-0 rounded-3xl blur-3xl opacity-30"
-                style={{ background: "linear-gradient(135deg, #7c3aed, #06b6d4)" }} />
-              <img
-                src={IMG_HERO}
-                alt="Акула бизнеса за ноутбуком"
-                className="relative w-80 h-80 md:w-[420px] md:h-[420px] object-contain rounded-3xl drop-shadow-2xl"
-              />
-              <div className="absolute -bottom-5 -left-5 glass rounded-2xl shadow-card-hover p-3 flex items-center gap-2.5 border border-white/50">
-                <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center">
-                  <Icon name="CheckCircle" size={22} className="text-accent" />
-                </div>
-                <div>
-                  <div className="text-xs font-black text-foreground">Без отказов</div>
-                  <div className="text-xs text-muted-foreground font-golos">от ФНС</div>
-                </div>
+          <div className="relative animate-float h-full min-h-[420px] lg:min-h-[560px]">
+            <div className="absolute inset-0 rounded-3xl blur-3xl opacity-25 pointer-events-none"
+              style={{ background: "linear-gradient(135deg, #7c3aed, #06b6d4)" }} />
+            <img
+              src={IMG_HERO}
+              alt="Акула бизнеса за ноутбуком"
+              className="relative w-full h-full object-cover rounded-3xl drop-shadow-2xl"
+              style={{ minHeight: "420px" }}
+            />
+            <div className="absolute -bottom-5 -left-5 glass rounded-2xl shadow-card-hover p-3 flex items-center gap-2.5 border border-white/50">
+              <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center">
+                <Icon name="CheckCircle" size={22} className="text-accent" />
               </div>
-              <div className="absolute -top-5 -right-5 glass rounded-2xl shadow-card-hover p-3 flex items-center gap-2.5 border border-white/50">
-                <div className="w-10 h-10 bg-primary/15 rounded-xl flex items-center justify-center">
-                  <Icon name="Clock" size={22} className="text-primary" />
-                </div>
-                <div>
-                  <div className="text-xs font-black text-foreground">3–5 дней</div>
-                  <div className="text-xs text-muted-foreground font-golos">до открытия счёта</div>
-                </div>
+              <div>
+                <div className="text-xs font-black text-foreground">Без отказов</div>
+                <div className="text-xs text-muted-foreground font-golos">от ФНС</div>
+              </div>
+            </div>
+            <div className="absolute -top-5 -right-5 glass rounded-2xl shadow-card-hover p-3 flex items-center gap-2.5 border border-white/50">
+              <div className="w-10 h-10 bg-primary/15 rounded-xl flex items-center justify-center">
+                <Icon name="Clock" size={22} className="text-primary" />
+              </div>
+              <div>
+                <div className="text-xs font-black text-foreground">3–5 дней</div>
+                <div className="text-xs text-muted-foreground font-golos">до открытия счёта</div>
               </div>
             </div>
           </div>
