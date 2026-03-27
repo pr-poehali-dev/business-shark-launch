@@ -306,7 +306,7 @@ function HeroSection() {
               <img
                 src={IMG_HERO}
                 alt="Акула бизнеса за ноутбуком"
-                className="relative w-80 h-80 md:w-[420px] md:h-[420px] object-cover rounded-3xl shadow-2xl border border-white/30"
+                className="relative w-80 h-80 md:w-[420px] md:h-[420px] object-contain rounded-3xl drop-shadow-2xl"
               />
               <div className="absolute -bottom-5 -left-5 glass rounded-2xl shadow-card-hover p-3 flex items-center gap-2.5 border border-white/50">
                 <div className="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center">
